@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yi_blog.demo.mapper.LogMapper">
+    <insert id="addLog" parameterType="log">
+        insert into t_log (action,time) values (#{action},#{time})
+    </insert>
+    <select id="queryAllLog" resultType="log">
+        select * from t_log order by time desc
+    </select>
+</mapper>

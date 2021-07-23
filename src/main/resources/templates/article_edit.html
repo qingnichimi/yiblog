@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>YiBlog</title>
+
+    <link rel="stylesheet" th:href="@{~/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{~/css/editormd.css}">
+    <!--    <link rel="shortcut icon" th:href="@{https://pandao.github.io/editor.md/favicon.ico}" type="image/x-icon" />-->
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header ">
+        <div class="layui-logo layui-bg-green"><a th:href="@{/admin}" style="color: white">YIBLOG</a></div>
+        <ul class="layui-nav layui-layout-right layui-bg-green">
+            <li class="layui-nav-item">
+                <a th:href="@{/}">
+                    去前台
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item"><a class="" th:href="@{/admin}">概览</a></li>
+                <li class="layui-nav-item"><a href="/admin/article">博客设置</a></li>
+                <li class="layui-nav-item"><a href="/write">写博客</a></li>
+                <li class="layui-nav-item"><a href="/admin/category">分类</a></li>
+                <li class="layui-nav-item"><a href="/admin/comment">评论</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <form class="layui-form layui-form-pane" th:action="@{/admin/edit_save}">
+            <div class="layui-form-item">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="hidden" th:value="${session.article_edit.id}" name="id">
+                    <input type="text" th:value="${session.article_edit.title}" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div id="content"  >
+                <textarea  name="content-md" style="display:none;" th:text="${session.article_edit.content_md}"></textarea>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script th:src="@{~/layui/layui.js}"></script>
+<script th:src="@{~/js/jquery.min.js}"></script>
+<script th:src="@{~/js/editormd.min.js}"></script>
+<script type="text/javascript">
+    //JavaScript代码区域
+    var testEditor;
+    $(function() {
+        editormd.urls.atLinkBase = "https://github.com/";
+
+        testEditor = editormd("content", {
+            width     : 1300,
+            height    : 600,
+            toc       : true,
+            todoList  : true,
+            htmlDecode      : "style,script,iframe",
+            tex             : true,
+            emoji           : true,
+            taskList        : true,
+            flowChart       : true,
+            sequenceDiagram : true,
+            saveHTMLToTextarea   : true,
+            path      : 'lib/'
+        });
+    });
+</script>
+<script type="text/javascript">
+    layui.use('form', function() {
+        var form = layui.form;
+        //监听提交
+        // form.on('submit(formDemo)', function (data) {
+        //     layer.msg(JSON.stringify(data.field));
+        //     return true;
+        // })
+    })
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+</script>
+</body>
+</html>

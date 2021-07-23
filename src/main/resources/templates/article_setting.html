@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>YiBloge</title>
+    <link rel="stylesheet" th:href="@{~/layui/css/layui.css}">
+    <style>
+        .page{
+            margin-left: 300px;
+        }
+        .page li {
+            font-size: 18px;
+            float: left;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header ">
+        <div class="layui-logo layui-bg-green"><a th:href="@{/admin}" style="color: white">YIBLOG</a></div>
+        <ul class="layui-nav layui-layout-right layui-bg-green">
+            <li class="layui-nav-item">
+                <a th:href="@{/}">
+                    去前台
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item"><a class="" th:href="@{/admin}">概览</a></li>
+                <li class="layui-nav-item"><a href="/admin/article">博客设置</a></li>
+                <li class="layui-nav-item"><a href="/write">写博客</a></li>
+                <li class="layui-nav-item"><a href="/admin/category">分类</a></li>
+                <li class="layui-nav-item"><a href="/admin/comment">评论</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="130">
+                    <col width="350">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>标题</th>
+                    <th>时间</th>
+                    <th>类别</th>
+                    <th>点击量</th>
+<!--                    <th>是否开启评论</th>-->
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody th:each="article : ${articles}" th:if="(${pageInfo.pageNum}-1) * ${pageInfo.pageSize} le ${articleStat.index} and ${articleStat.index} lt ${pageInfo.pageSize} * ${pageInfo.pageNum}">
+                <tr>
+                    <td th:text="${article.id}"></td>
+                    <td th:text="${article.title}"></td>
+                    <td th:text="${#dates.format(article.updatetime, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${article.category}"><span class="layui-badge layui-bg-blue">Java</span></td>
+                    <td th:text="${article.hits}"></td>
+<!--                    <td>-->
+<!--                        <form class="layui-form" action="">-->
+<!--                            <div class="layui-form-item">-->
+<!--                                <input type="checkbox" name="zzz" lay-skin="switch"  lay-text="开启|关闭">-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                    </td>-->
+                    <td>
+
+                        <div class="layui-btn-group">
+                            <a th:href="@{/admin/edit(id=${article.id})}">
+                                <button type="button" class="layui-btn layui-btn-sm"  >
+                                    <i class="layui-icon">&#xe642;</i>
+                                </button>
+                            </a>
+                            <a th:href="@{/admin/delArticle(id=${article.id})}" onclick="return confirm('确定删除吗')">
+                                <button type="button" class="layui-btn layui-btn-sm" >
+                                    <i class="layui-icon">&#xe640;</i>
+                                </button>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!--        分页-->
+            <hr class="layui-bg-black">
+            <ul class="page">
+                <!-- 首页 -->
+                <li>
+                    <a th:href="'/admin/article?pageNum=1'">首页</a>
+                </li>
+
+                <!-- 上一页 -->
+                <li th:if="${pageInfo.isHasPreviousPage()}">
+                    <a th:href="'/admin/article?pageNum=' + ${pageInfo.getPrePage()}" th:text="上一页"></a>
+                </li>
+
+                <!--遍历条数-->
+                <li th:each="nav:${pageInfo.navigatepageNums}">
+                    <a th:href="'/admin/article?pageNum='+${nav}" th:text="${nav}" th:if="${nav != pageInfo.pageNum}"></a>
+                </li>
+                <!-- 下一页 -->
+                <li th:if="${pageInfo.isHasNextPage()}">
+                    <a th:href="'/admin/article?pageNum=' + ${pageInfo.getNextPage()}" th:text="下一页"></a>
+                </li>
+                <!-- 尾页 -->
+                <li>
+                    <a th:href="'/admin/article?pageNum=' + ${pageInfo.getPages()}">尾页</a>
+                </li>
+                <li>总结果数：<span th:text="${pageInfo.total}"></span></li>
+            </ul>
+            <hr class="layui-bg-black">
+        </div>
+
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script th:src="@{~/layui/layui.js}"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('form', function(){
+        var form = layui.form;
+    })
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+    layui.use('layer', function(){
+        var layer = layui.layer;
+
+    });
+
+</script>
+</body>
+</html>

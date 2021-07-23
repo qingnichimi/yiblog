@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <title>YiBlog</title>
+
+  <link rel="stylesheet" th:href="@{~/layui/css/layui.css}">
+</head>
+<body class="layui-bg-gray">
+    <div class="layui-container ">
+      <div class="layui-row">
+        <div class="layui-col-md12">
+          <ul class="layui-nav" lay-filter="">
+            <li class="layui-nav-item layui-anim-rotate"><a th:href="@{/}"  style="font-size: 40px" >YIblog</a></li>
+            <li class="layui-nav-item"><a th:href="@{/archive}">归档</a></li>
+            <li class="layui-nav-item"><a th:href="@{/category}">分类</a></li>
+            <li class="layui-nav-item">
+              <form th:action="@{/search}">
+                <input type="text"  name="keyWord" required  lay-verify="required" placeholder="搜索..." style="height: 35px;margin-right: 10px"><button class="layui-btn layui-btn-normal" type="submit">搜索</button>
+              </form>
+            </li>
+          </ul>
+        </div>
+        <div class="layui-row ">
+            <ul class="layui-timeline"  th:each="time : ${timeList}" style="margin-left: 100px;margin-top: 10px">
+                <li class="layui-timeline-item">
+                  <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                  <div class="layui-timeline-content layui-text">
+                    <h3 class="layui-timeline-title" th:text="${time}"></h3>
+                      <div th:each="article : ${articles}"><a th:text="${article.title}" th:if="${#dates.format(article.updatetime, 'yyyy')} == ${time}" th:href="@{/article(id=${article.id})}" style="font-size: 20px"> </a></div>
+                  </div>
+                </li>
+              </ul>
+        </div>
+        <script>
+            //注意：导航 依赖 element 模块，否则无法进行功能性操作
+            layui.use('element', function(){
+              var element = layui.element;
+              //…
+            });
+          </script>
+          
+    </div>
+    </div>
+</body>
+</html>

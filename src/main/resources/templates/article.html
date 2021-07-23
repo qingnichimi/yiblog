@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>YiBlog</title>
+    <link rel="stylesheet" th:href="@{~/layui/css/layui.css}">
+    <!-- ⚠️生产环境请指定版本号，如 https://cdn.jsdelivr.net/npm/vditor@x.x.x/dist... -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor/dist/index.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vditor/dist/index.min.js" defer></script>
+    <script>
+        new Vditor('vditor', {
+            cache: {
+                enable: false,
+            },
+            value: ir,
+        })
+    </script>
+</head>
+<body class="layui-bg-gray">
+<div class="layui-container ">
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <ul class="layui-nav" lay-filter="">
+                <li class="layui-nav-item layui-anim-rotate"><a th:href="@{/}"  style="font-size: 40px">YIblog</a></li>
+                <li class="layui-nav-item"><a th:href="@{/archive}">归档</a></li>
+                <li class="layui-nav-item"><a href="">分类</a></li>
+                <li class="layui-nav-item">
+                    <form th:action="@{/search}">
+                        <input type="text"  name="keyWord" required  lay-verify="required" placeholder="搜索..." style="height: 35px;margin-right: 10px"><button class="layui-btn layui-btn-normal" type="submit">搜索</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-row" style="background-color: #dddddd;margin:10px 0px;">
+        <div style="padding:10px 5px 15px 20px;">
+            <h1 th:text="${article.title}"></h1>
+            <p th:utext="${article.content}">文章内容</p>
+        </div>
+    </div>
+    <div class="layui-row" style="margin-top: 10px;padding: 10px 20px">
+        <h2>评论:</h2>
+        <div class="layui-card" th:each="comment : ${comments}" >
+            <div class="layui-card-header" th:text="${comment.nickname}">文章</div>
+            <div class="layui-card-body" style="background-color: #dddddd">
+                <p th:text="${comment.comment}"></p>
+                <p th:text="${#dates.format(comment.time, 'yyyy-MM-dd HH:mm')}"></p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" style="margin-top: 10px">
+        <form class="layui-form layui-form-pane" th:action="@{/comment}">
+            <input type="hidden" name="article_id" th:value="${article.id}" >
+            <div class="layui-form-item">
+                <label class="layui-form-label">昵称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="nikename" required  lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-block">
+                    <input type="email" name="email" required  lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">个人网站</label>
+                <div class="layui-input-block">
+                    <input type="text" name="link"  placeholder="请输入网址" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">评论</label>
+                <div class="layui-input-block">
+                    <textarea name="comment" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+        //…
+    });
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+</script>
+
+</div>
+</body>
+</html>

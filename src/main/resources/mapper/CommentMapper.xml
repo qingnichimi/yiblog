@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yi_blog.demo.mapper.CommentMapper">
+    <insert id="addComment" parameterType="comment">
+        insert into t_comment(nickname,email,link,article_id,comment,time) values (#{nickname},#{email},#{link},#{article_id},#{comment},#{time})
+    </insert>
+    <select id="queryAllComment" resultType="comment">
+        select * from t_comment
+    </select>
+    <select id="queryCommentByArticleId" resultType="comment">
+        select * from t_comment where article_id=#{article_id}
+    </select>
+    <select id="count" resultType="int">
+        select count(*) from t_comment
+    </select>
+    <delete id="delComment" parameterType="int">
+        delete from t_comment where comment_id = #{comment_id}
+    </delete>
+    <select id="queryById" parameterType="int" resultType="comment">
+        select * from t_comment where comment_id = #{comment_id}
+    </select>
+    <delete id="delByArticleId" parameterType="int">
+        delete from t_comment where article_id = #{id}
+    </delete>
+</mapper>

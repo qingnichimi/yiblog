@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>YiBlog</title>
+
+    <link rel="stylesheet" th:href="@{~/layui/css/layui.css}">
+    <style>
+        .page{
+            margin-left: 300px;
+        }
+        .page li {
+            font-size: 18px;
+            float: left;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body class="layui-bg-gray">
+<div class="layui-container ">
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <ul class="layui-nav" lay-filter="">
+                <li class="layui-nav-item layui-anim-rotate"><a th:href="@{/}"  style="font-size: 40px">YIblog</a></li>
+                <li class="layui-nav-item"><a th:href="@{/archive}">归档</a></li>
+                <li class="layui-nav-item"><a href="">分类</a></li>
+                <li class="layui-nav-item">
+                    <form th:action="@{/search}">
+                        <input type="text"  name="keyWord" required  lay-verify="required" placeholder="搜索..." style="height: 35px;margin-right: 10px"><button class="layui-btn layui-btn-normal" type="submit">搜索</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-row layui-col-space10"   style="margin:10px 0px;">
+        <div class="layui-col-md4"  th:each="category : ${categories}">
+            <div class="layui-card" >
+                <div class="layui-card-header"  ><span class="layui-badge"  th:text="${category.name}">赤</span></div>
+                    <h3 class="layui-card-body" th:each="article : ${articles}"><a th:href="@{/article(id=${article.id})}" th:text="${article.title}" th:if="${category.category_id} == ${article.category}"></a></h3>
+            </div>
+        </div>
+    </div>
+    <!--  分页-->
+<!--    <hr class="layui-bg-blue">-->
+<!--    <ul class="page">-->
+<!--        &lt;!&ndash; 首页 &ndash;&gt;-->
+<!--        <li>-->
+<!--            <a th:href="'/?pageNum=1'">首页</a>-->
+<!--        </li>-->
+
+<!--        &lt;!&ndash; 上一页 &ndash;&gt;-->
+<!--        <li th:if="${pageInfo.isHasPreviousPage()}">-->
+<!--            <a th:href="'/?pageNum=' + ${pageInfo.getPrePage()}" th:text="上一页"></a>-->
+<!--        </li>-->
+
+<!--        &lt;!&ndash;遍历条数&ndash;&gt;-->
+<!--        <li th:each="nav:${pageInfo.navigatepageNums}">-->
+<!--            <a th:href="'/?pageNum='+${nav}" th:text="${nav}" th:if="${nav != pageInfo.pageNum}"></a>-->
+<!--        </li>-->
+<!--        &lt;!&ndash; 下一页 &ndash;&gt;-->
+<!--        <li th:if="${pageInfo.isHasNextPage()}">-->
+<!--            <a th:href="'/?pageNum=' + ${pageInfo.getNextPage()}" th:text="下一页"></a>-->
+<!--        </li>-->
+<!--        &lt;!&ndash; 尾页 &ndash;&gt;-->
+<!--        <li>-->
+<!--            <a th:href="'/?pageNum=' + ${pageInfo.getPages()}">尾页</a>-->
+<!--        </li>-->
+<!--        <li>总结果数：<span th:text="${pageInfo.total}"></span></li>-->
+<!--    </ul>-->
+<!--    <hr class="layui-bg-blue">-->
+</div>
+
+<script th:src="@{~/layui/layui.js}"></script>
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+        //…
+    });
+
+</script>
+
+</div>
+</body>
+</html>
